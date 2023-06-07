@@ -60,19 +60,19 @@
             <h3>1. Configuración de interfaces</h3>
             <p>Primero es necesario configurar las direcciones especificadas para LAN 1 para que el firewall pueda ser utilizado dentro de la LAN net.</p>
             <div class="codeSection">
-                <p>Modificación de la interfaz WAN con los siguientes parametros</p>
+                <p>Modificación de la interfaz WAN con los siguientes parámetros</p>
                 <div class="block">
                     <ol><code>ipv4 address 158..122.90.18</code></ol>
                     <ol><code>gateway 158.122.88.4</code></ol>
                 </div>
-                <p>Modificación de la interfaz LAN con el siguiente parametro</p>
+                <p>Modificación de la interfaz LAN con el siguiente parámetro</p>
                 <div class="block">
                     <ol><code>ipv4 address 10.21.1.8</code></ol>
                 </div>
             </div>
            
             <h3>2. Creación de aliases</h3>
-            <p>Para simplificar y minimizar la cantidad de reglas por crear en el firewall creamos varios alias agrupados en función de puertos necesarios para TCP, UDP y EMAIL.</p>
+            <p>Para simplificar y minimizar la cantidad de reglas por crear en el firewall creamos varios alias agrupados en función de puertos necesarios para TCP, UDP e EMAIL.</p>
             <div class="codeSection">
                 <div class="block">
                     <ol><code>Email (587, 25, 465, 2525)</code></ol>
@@ -93,7 +93,7 @@
             </div>
             <p>Es importante considerar que la configuración de los servidores DNS sean los correctos (en este caso utilizando los servidores DNS creados por el equipo de servicios de internet)</p>
             <p>Otro punto importante relacionado a la configuración del firewall es en habilitar el servicio SNMP, ya que también se busca monitorear el firewall (considerando el puerto 161 y el community string de public-asr).</p>
-            <p>Finalmente se realiza la instalación de un paquete SNMPD (localizado en el Package Manager de pfSense) para el monitoreo de varios sensores no descubiertos</p>
+            <p>Finalmente se realiza la instalación de un paquete SNMPD (localizado en el Package Manager de pfSense) para el monitoreo de varios sensores no descubiertos.</p>
         </div>
 
             

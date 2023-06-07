@@ -57,8 +57,8 @@ body {
         <div>
             <h1>Configuración Debian LAN 1</h1>
 
-            <h3>1. Configuración del adaptador y dns</h3>
-            <p>El primer paso realizado fue la configuración del servidor debian para asegurar que la interfaz de red fuera la correcta y esta pudiera ser identificada por otros dispositivos dentro de la red.</p>
+            <h3>1. Configuración del adaptador y DNS</h3>
+            <p>El primer paso realizado fue la configuración del servidor Debian para asegurar que la interfaz de red fuera la correcta y esta pudiera ser identificada por otros dispositivos dentro de la red.</p>
             <div class="codeSection">
                 <p>Modificación del archivo /etc/network/interfaces para especificar la ip dentro de la LAN 1.</p>
                 <div class="block">
@@ -67,7 +67,7 @@ body {
                     <ol><code>gateway 10.21.1.8</code></ol>
                     <ol><code>dns-nameservers 10.21.1.8</code></ol>
                 </div>
-                <p>Tambien modificar el archivo de configuración /etc/resolv.conf para incluir el dns con la dirección del firewall</p>
+                <p>Tambien modificar el archivo de configuración /etc/resolv.conf para incluir el DNS con la dirección del firewall</p>
                 <div class="block">
                     <ol><code>nameserver 10.21.1.8</code></ol>
                 </div>

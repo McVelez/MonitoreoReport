@@ -58,7 +58,7 @@
             <h1>Configuración pfSense LAN 2</h1>
 
             <h3>1. Configuración de interfaces</h3>
-            <p>Primero es necesario configurar las direcciones especificadas para LAN 1 para que el firewall pueda ser utilizado dentro de la LAN net.</p>
+            <p>Primero es necesario configurar las direcciones especificadas para LAN 1 para que el Firewall pueda ser utilizado dentro de la LAN net.</p>
             <div class="codeSection">
                 <p>Modificación de la interfaz WAN con los siguientes parametros</p>
                 <div class="block">
@@ -72,7 +72,7 @@
             </div>
            
             <h3>2. Creación de aliases</h3>
-            <p>Para simplificar y minimizar la cantidad de reglas por crear en el firewall creamos varios alias agrupados en función de puertos necesarios para TCP, UDP y EMAIL.</p>
+            <p>Para simplificar y minimizar la cantidad de reglas por crear en el Firewall creamos varios alias agrupados en función de puertos necesarios para TCP, UDP y EMAIL.</p>
             <div class="codeSection">
                 <div class="block">
                     <ol><code>Email (587, 25, 465, 2525)</code></ol>
@@ -81,7 +81,7 @@
                 </div>
             </div>
 
-            <h3>3. Configuración del firewall</h3>
+            <h3>3. Configuración del Firewall</h3>
             <p>Una vez configurado las direcciones IP y creado los aliases es necesario crear las reglas LAN para la navegación y envío de correos de los dispositivos dentro de dicha red.</p>
             <div class="codeSection">
                 <div class="block">
@@ -92,7 +92,7 @@
                 </div>
             </div>
             <p>Es importante considerar que la configuración de los servidores DNS sean los correctos (en este caso utilizando los servidores DNS creados por el equipo de servicios de internet)</p>
-            <p>Otro punto importante relacionado a la configuración del firewall es en habilitar el servicio SNMP, ya que también se busca monitorear el firewall (considerando el puerto 161 y el community string de public-asr).</p>
+            <p>Otro punto importante relacionado a la configuración del Firewall es en habilitar el servicio SNMP, ya que también se busca monitorear el Firewall (considerando el puerto 161 y el community string de public-asr).</p>
             <p>Finalmente se realiza la instalación de un paquete SNMPD (localizado en el Package Manager de pfSense) para el monitoreo de varios sensores no descubiertos</p>
         </div>
 

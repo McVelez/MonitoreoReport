@@ -68,12 +68,12 @@
 
             <h3>1. Instalación y configuración del NMS</h3>
             <p align="justify">Para el caso de la LAN 1 - Lado Izquierdo se maneja el SNMP Manager Zabbix, un NMS gratuito capaz de monitorear varios sensores y dispositivos, teniendo también la capacidad de utilizar triggers y notificaciones para el envío de eventos o alarmas establecidas.</p>
-            <p align="justify">La instalación es realizada en la computadora 10.21.1.50 (Servidor Debian), en donde esta requiere la especificación de un tipo de base de datos (MySQL o PostgreSQL) para la generación de una base de datos en donde se almacena la información recuperada de los agentes y mostrada por el NMS de forma organizada en los dashboards proporcionados. </p>
-            <p align="justify">Una vez instalado correctamente Zabbix se utiliza el puerto 8080 para entrar a la interfaz de Zabbix (19.21.1.50:8080), en donde se tiene acceso a la configuración del NMS, los dispositivos y los sensores por monitorear. </p>
+            <p align="justify">La instalación es realizada en la computadora 10.21.1.50 (Servidor Debian), en dónde esta requiere la especificación de un tipo de base de datos (MySQL o PostgreSQL) para la generación de un archivo de información en donde se almacene la información recuperada de los agentes y mostrada por el NMS de forma organizada en los dashboards proporcionados. </p>
+            <p align="justify">Una vez instalado correctamente Zabbix se utiliza el puerto 8080 para entrar a la interfaz de Zabbix (19.21.1.50:8080), en dónde se tiene acceso a la configuración del NMS, los dispositivos y los sensores por monitorear. </p>
             <p align="justify">Es importante recalcar que por cada dispositivo agregado en la interfaz de Zabbix se especifica la dirección de dicho dispositivo, el protocolo que se utiliza (SNMP con puerto 161 o Zabbix Agent con puerto 10050) y un template (creado o utilizando uno predeterminado) de sensores comúnmente asociados a un dispositivo. </p>
             
             <h3>2. Configuración de agentes para servidores debian y pfsense</h3>
-            <p align="justify">De igual forma que se realizo la configuración del agente en el servidor debian con ip 10.21.1.50 explicado en la sección de configuración de debian se realiza la misma serie de pasos para los dispositivos que se buscan monitorear.</p>
+            <p align="justify">De igual forma que se realizó la configuración del agente en el servidor Debian con IP 10.21.1.50 explicado en la sección de configuración de debian se realiza la misma serie de pasos para los dispositivos que se buscan monitorear.</p>
             <p align="justify">Considerando lo mencionado anteiormente e identificando la gran cantidad de dispositivos por monitorear se desarrolló el siguiente script de bash para facilitar la instalación del agente sobre los dispositivos con sistema operativo de linux. </p>
             <div class="codeSection">
                 <p align="justify">Es importante considerar que para los dispositivos localizados en la LAN 1 es necesario realizar la instalación y configuración de un agente de zabbix a diferencia de un agente SNMP para poder monitorear correctamente todos los servicios (HTTP, DNS, SSH, etc.) que no pueden ser monitoreados con el uso único de SNMP de forma simple con el uso de Zabbix. </p>
@@ -100,7 +100,7 @@
 
             <h3>3. Monitoreo de sensores</h3>
             <p align="justify"> Como se mencionó previamente, al agregar un dispositivo se puede agregar un template que contenga los sensores por monitorear. Sin embargo, en varias ocasiones un sensor no mantiene la misma nomenclatura de la llave utilizada para identificar al sensor en su respectivo MIB, por lo que se puede llegar a utilizar una regla de discovery de Zabbix para recuperar todos los sensores que pueden ser monitoreados directamente.</p>
-            <p align="justify"> En base a los requerimientos del proyecto se monitorean los siguientes sensores para cada servidor Debian, firewall pfSense y Honeypot:</p>
+            <p align="justify"> En base a los requerimientos del proyecto se monitorean los siguientes sensores para cada servidor Debian, Firewall pfSense y Honeypot:</p>
             <div class="twoColumnList">
                 <ul>
                     <li>Uptime</li>

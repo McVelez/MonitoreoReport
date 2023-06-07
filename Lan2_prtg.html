@@ -71,7 +71,7 @@
             <p align="justify">La instalación es realizada en la computadora 10.22.1.220 (Computadora Windows 10), en donde simplemente se siguen los pasos de instalación proporcionados por el instalador de PRTG. </p>
             
             <h3>2. Configuración de agentes para servidores debian y pfsense</h3>
-            <p align="justify">De igual forma que se realizo la configuración del agente en el servidor debian con ip 10.22.1.50 explicado en la sección de configuración de debian se realiza la misma serie de pasos para los dispositivos que se buscan monitorear.</p>
+            <p align="justify">De igual forma que se realizo la configuración del agente en el servidor debian con IP 10.22.1.50 explicado en la sección de configuración de debian se realiza la misma serie de pasos para los dispositivos que se buscan monitorear.</p>
             <p align="justify">Considerando lo mencionado anteiormente e identificando la gran cantidad de dispositivos por monitorear se desarrolló el siguiente script de bash para facilitar la instalación del agente sobre los dispositivos con sistema operativo de linux. </p>
             <div class="codeSection">
                 <div class="block">
@@ -89,7 +89,7 @@
 
             <h3>3. Monitoreo de sensores</h3>
             <p align="justify"> De igual forma que con Zabbix, PRTG tiene una herramienta de auto-descovery que permite localizar varios sensores disponibles en el dispositivo. Además, PRTG tiene la facilidad de la creación de un template de sensores por monitorear que puede ser utilizado al agregar un dispositivo. A diferencia de Zabbix, en el manejador PRTG se utilizó unicamente del protocolo SNMP para la comunicación de mensajes entre el NMS y los sensores.</p>
-            <p align="justify"> En base a los requerimientos del proyecto se monitorean los siguientes sensores para cada servidor Debian, firewall pfSense y Honeypot:</p>
+            <p align="justify"> En base a los requerimientos del proyecto se monitorean los siguientes sensores para cada servidor Debian, Firewall pfSense y Honeypot:</p>
             <div class="twoColumnList">
                 <ul>
                     <li>Uptime</li>
