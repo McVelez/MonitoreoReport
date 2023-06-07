@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Configuracion LAN 2</title>
+  <style>
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f5f5f5;
+    }
+        
+    .Apartados{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: calc(13px + 0.3vw);
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        min-width: 1300px;
+        max-width: 1200px;
+    }
+
+    .codeSection{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        max-width: 70%;
+        background-color: #f5f5dc;
+        border: 1px solid #dbdbc6;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 0 auto; /* Add this line */
+    }
+
+    .block{
+        font-style: italic;
+        align-items: center;
+        text-align: left;
+        
+    }
+
+  </style>
+</head>
+<body>
+    <div class="Apartados">
+        
+        <div>
+            <h1>Configuración pfSense LAN 2</h1>
+
+            <h3>1. Configuración de interfaces</h3>
+            <p>Primero es necesario configurar las direcciones especificadas para LAN 1 para que el firewall pueda ser utilizado dentro de la LAN net.</p>
+            <div class="codeSection">
+                <p>Modificación de la interfaz WAN con los siguientes parametros</p>
+                <div class="block">
+                    <ol><code>ipv4 address 158.122.66.18</code></ol>
+                    <ol><code>gateway 158.122.64.4</code></ol>
+                </div>
+                <p>Modificación de la interfaz LAN con el siguiente parametro</p>
+                <div class="block">
+                    <ol><code>ipv4 address 10.22.1.8</code></ol>
+                </div>
+            </div>
+           
+            <h3>2. Creación de aliases</h3>
+            <p>Para simplificar y minimizar la cantidad de reglas por crear en el firewall creamos varios alias agrupados en función de puertos necesarios para TCP, UDP y EMAIL.</p>
+            <div class="codeSection">
+                <div class="block">
+                    <ol><code>Email (587, 25, 465, 2525)</code></ol>
+                    <ol><code>Internet_TCP (80, 443, 161)</code></ol>
+                    <ol><code>Internet_UDP (53, 161, 123, 162)</code></ol>
+                </div>
+            </div>
+
+            <h3>3. Configuración del firewall</h3>
+            <p>Una vez configurado las direcciones IP y creado los aliases es necesario crear las reglas LAN para la navegación y envío de correos de los dispositivos dentro de dicha red.</p>
+            <div class="codeSection">
+                <div class="block">
+                    <ol><code>REGLA -> UDP: (Protocol: UDP, Source: LAN net, Destination Port: Internet_UDP)</code></ol>
+                    <ol><code>REGLA -> TCP: (Protocol: TCP, Source: LAN net, Destination Port: Internet_TCP)</code></ol>
+                    <ol><code>REGLA -> Email: (Protocol: TCP, Source: LAN net, Destination Port: Email)</code></ol>
+                    <ol><code>REGLA -> ICMP: (Protocol: ICMP, Source: LAN net, Destination Port: any)</code></ol>
+                </div>
+            </div>
+            <p>Es importante considerar que la configuración de los servidores DNS sean los correctos (en este caso utilizando los servidores DNS creados por el equipo de servicios de internet)</p>
+            <p>Otro punto importante relacionado a la configuración del firewall es en habilitar el servicio SNMP, ya que también se busca monitorear el firewall (considerando el puerto 161 y el community string de public-asr).</p>
+            <p>Finalmente se realiza la instalación de un paquete SNMPD (localizado en el Package Manager de pfSense) para el monitoreo de varios sensores no descubiertos</p>
+        </div>
+
+            
+    </div>
+
+
+</body>
+</html>

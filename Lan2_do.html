@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Configuracion LAN 2</title>
+  <style>
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f5f5f5;
+    }
+        
+    .Apartados{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: calc(13px + 0.3vw);
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        min-width: 1300px;
+        max-width: 1200px;
+    }
+
+    .codeSection{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        max-width: 70%;
+        background-color: #f5f5dc;
+        border: 1px solid #dbdbc6;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 0 auto; /* Add this line */
+    }
+
+    .block{
+        font-style: italic;
+        align-items: center;
+        text-align: left;
+        
+    }
+
+  </style>
+</head>
+<body>
+    <div class="Apartados">
+        
+        <div>
+            <h1>Configuración Digital Ocean LAN 2</h1>
+
+            <h3>1. Configuración de agente</h3>
+            <p>Para poder realizar pruebas directamente con la computadora previamente configurada es necesario instalar un agente SNMP para que el NMS pueda monitorear los sensores especificados. Es importante consdierar y verificar que el servicio snmpd y snmp estén instalados.</p>
+            <div class="codeSection">
+                <div class="block">
+                    <ol><code>apt update</code></ol>
+                    <ol><code>apt install -y snmp snmpd</code></ol>
+                    <ol><code>interfaces_file='/etc/network/interfaces'</code></ol>
+                    <ol><code>ip=$(grep -Po "^\s*address \K[\d.]+(?=\/)" "$interfaces_file" | head -n 1)</code></ol>
+                    <ol><code>echo "$ip"</code></ol>
+                    <ol><code>sed -i "s/^agentaddress.*/agentaddress udp:161/" /etc/snmp/snmpd.conf</code></ol>
+                    <ol><code>sed -i 's/^rocommunity.*/rocommunity public-asr 158.122.66.18/' /etc/snmp/snmpd.conf</code></ol>
+                    <ol><code>systemctl restart snmpd</code></ol>
+                </div>
+            </div>
+                
+
+            </div>
+            <p align="justify">De igual forma que la configuración realizada con el D.O en la LAN 1 se realiza dicho proceso para la LAN 2 pero con la configuración del protocolo SNMP, en donde udp:161 indica que el agente estará recibiendo mensajes de todos, pero unicamente devolviendo mensajes a la dirección ip del gateway del firewall (158.122.66.18)   . </p>
+           
+            
+        </div>
+
+            
+    </div>
+
+
+</body>
+</html>

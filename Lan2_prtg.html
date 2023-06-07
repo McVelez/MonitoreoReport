@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Configuracion LAN 2</title>
+  <style>
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f5f5f5;
+    }
+
+    .Apartados{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: calc(13px + 0.3vw);
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        min-width: 1300px;
+        max-width: 1200px;
+    }
+
+    .codeSection{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        max-width: 70%;
+        background-color: #f5f5dc;
+        border: 1px solid #dbdbc6;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 0 auto; /* Add this line */
+    }
+
+    .block{
+        font-style: italic;
+        align-items: center;
+        text-align: left;
+    }
+
+    .twoColumnList{
+        column-count: 2;
+        column-gap: 10px;
+    }
+    ul {
+      padding-right: 100px;
+      margin: 0;
+    }
+
+
+  </style>
+</head>
+<body>
+    <div class="Apartados">
+        
+        <div>
+            <h1>Configuración PRTG LAN 2</h1>
+
+            <h3>1. Instalación y configuración del NMS</h3>
+            <p align="justify">Para el caso de la LAN 2 - Lado Derecho se maneja el SNMP Manager PRTG, un NMS con un nivel gratuito (y diferentes niveles opcionales de pago) capaz de monitorear varios sensores y dispositivos, teniendo también la capacidad de utilizar alarmas, tickets y notificaciones para el envío de mensajes.</p>
+            <p align="justify">La instalación es realizada en la computadora 10.22.1.220 (Computadora Windows 10), en donde simplemente se siguen los pasos de instalación proporcionados por el instalador de PRTG. </p>
+            
+            <h3>2. Configuración de agentes para servidores debian y pfsense</h3>
+            <p align="justify">De igual forma que se realizo la configuración del agente en el servidor debian con ip 10.22.1.50 explicado en la sección de configuración de debian se realiza la misma serie de pasos para los dispositivos que se buscan monitorear.</p>
+            <p align="justify">Considerando lo mencionado anteiormente e identificando la gran cantidad de dispositivos por monitorear se desarrolló el siguiente script de bash para facilitar la instalación del agente sobre los dispositivos con sistema operativo de linux. </p>
+            <div class="codeSection">
+                <div class="block">
+                    <ol><code>apt update</code></ol>
+                    <ol><code>apt install -y snmp snmpd</code></ol>
+                    <ol><code>interfaces_file='/etc/network/interfaces'</code></ol>
+                    <ol><code>ip=$(grep -Po "^\s*address \K[\d.]+(?=\/)" "$interfaces_file" | head -n 1)</code></ol>
+                    <ol><code>echo "$ip"</code></ol>
+                    <ol><code>sed -i "s/^agentaddress.*/agentaddress udp:${ip}:161/" /etc/snmp/snmpd.conf</code></ol>
+                    <ol><code>sed -i 's/^rocommunity.*/rocommunity public-asr 10.22.1.200/' /etc/snmp/snmpd.conf</code></ol>
+                    <ol><code>systemctl restart snmpd</code></ol>
+                </div>
+            </div>
+            <p align="justify">Para la configuración de los agentes en pfSense se siguió la misma serie de pasos explicada en la sección de configuración de pfsense, en donde se realizaron varias juntas con los diferentes equipos para la coordinación y verificación de la instalación del agente. </p>
+
+            <h3>3. Monitoreo de sensores</h3>
+            <p align="justify"> De igual forma que con Zabbix, PRTG tiene una herramienta de auto-descovery que permite localizar varios sensores disponibles en el dispositivo. Además, PRTG tiene la facilidad de la creación de un template de sensores por monitorear que puede ser utilizado al agregar un dispositivo. A diferencia de Zabbix, en el manejador PRTG se utilizó unicamente del protocolo SNMP para la comunicación de mensajes entre el NMS y los sensores.</p>
+            <p align="justify"> En base a los requerimientos del proyecto se monitorean los siguientes sensores para cada servidor Debian, firewall pfSense y Honeypot:</p>
+            <div class="twoColumnList">
+                <ul>
+                    <li>Uptime</li>
+                    <li>Uso de CPU</li>
+                    <li>Memoria disponible</li>
+                    <li>Espacio en disco disponible</li>
+                    <li>Tráfico de cada adaptador de red (Ancho de banda)</li>
+                </ul>
+            </div>
+            <p align="justify">Por otro lado, se realiza el monitoreo de los servicios de internet para la LAN 2 y las computadoras D.O. (Digital Ocean)</p>
+            <div class="twoColumnList">
+                <ul>
+                    <li>HTTP (lectura char)</li>
+                    <li>FTP</li>
+                    <li>SSH</li>
+                    <li>HTTPS (lectura char)</li>
+                    <li>DNS</li>
+                    <li>freeRadius</li>
+                    <li>SMTP</li>
+                    <li>POP3</li>
+                    <li>IMAP</li>
+                  </ul>
+            </div>
+
+            <h3>4. Configuración de notificaciones a Telegram y Email</h3>
+            <p align="justify">En función de las notificaciones de Telegram y Email no existe mucha diferencia con respecto a la configuración necesaria por realizar para recibir los mensajes y correos correctamente. Sin embargo, es importante considerar que en PRTG se presentan 2 opciones de envío de mensajes: ticket notifications y push notifications, en donde ambos requieren la especificación del evento en donde se genera el mensaje, el tiempo por esperar antes de enviar el mensaje, entre otras. </p>
+            <p align="justify">Al igual que Zabbix, PRTG tiene la capacidad de generación de notificaciones por medio de mensajes de Telegram y de generación de correos, en donde se hace uso de los mismos requerimientos-elementos: </p>
+            
+            <p>Para la generación y envío de mensajes por Telegram</p>
+            <ul>
+                <li> Un grupo de Telegram con permisos de privacidad público para recibir las notificaciones descritas. </li>
+                <li> Un Telegram Bot y API Url utilizados para el envío de mensajes a un grupo o usuario designado. </li>
+            </ul>
+            <img src="TelegramFlow2.PNG" alt="telegram" width="800">
+
+            <p>Para la generación y envío de correos</p>
+            <ul>
+                <li> Un servidor de Correo SMTP que servirá como un servidor relay que se encarga del manejo de envío de los correos. </li>
+                <li> Un correo dedicado y utilizado para el envío de los correos. (Considerando que se debe de generar una contraseña especifica de uso de aplicación de google para el uso de esta) </li>
+            </ul>
+            <img src="EmailFlow2.PNG" alt="email" width="800">
+
+        </div>
+
+            
+    </div>
+
+
+</body>
+</html>

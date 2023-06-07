@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Linux Configuration Report</title>
+  <style>
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+        
+    .InformationHead{
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .Title{
+        text-align: center;
+        margin-top: 100px;
+        margin-bottom: 50px;
+        font-weight: bold;
+        font-size: calc(50px + 1vw);
+    }
+    
+    .Apartados{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 80px;
+        font-size: calc(15px + 0.3vw);
+    }
+
+    .Section{
+        margin-bottom: 40px;
+    }
+
+    table {
+        margin: 0 auto; 
+        width: 50%;
+        min-width: 50%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        font-size: 20px;
+    }
+    
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .column {
+        display: flex;
+        flex-direction: column;
+        margin-right: 100px; /* Add spacing between columns */
+    }
+
+    .temporal{
+        font-size: large;
+    }
+
+  </style>
+</head>
+<body>
+  
+  
+    <div className="InformationHead"> 
+        <div class="Title">
+            Reporte de Configuración de Monitoreo
+            <h3 class="temporal">Elian Cruz, Enrique Navarro, Nestor de la Cruz y Marco Vélez</h3>
+        </div>
+        
+        <table>
+            <thead>
+            <tr>
+                <th>Configuration Item</th>
+                <th>Windows 7</th>
+                <th>Debian</th>
+                <th>PfSense</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>LAN 1 - Izquierda</td>
+                <td>10.21.1.180</td>
+                <td>10.21.1.50</td>
+                <td>10.21.1.8</td>
+            </tr>
+            <tr>
+                <td>LAN 2 - Derecha</td>
+                <td>10.22.1.180</td>
+                <td>10.22.1.50</td>
+                <td>10.22.1.8</td>
+            </tr>
+            <!-- Add more configuration items as needed -->
+            </tbody>
+        </table>
+    </div>
+  
+    <div class="Apartados">
+        <div class="column">
+            <h3>Documentación de LAN 1</h3>
+            <a class="Section" href="Lan1_debian.html"> LAN 1 - Configuracion DEBIAN</a>
+            <a class="Section" href="Lan1_pfsense.html"> LAN 1 - Configuracion PFSENSE</a>
+            <a class="Section" href="Lan1_zabbix.html"> LAN 1 - Configuracion ZABBIX</a>
+            <a class="Section" href="Lan1_do.html"> LAN 1 - Configuracion D.O.</a>
+        </div>
+        <div class="column">
+            <h3>Documentación de LAN 2</h3>
+            <a class="Section" href="Lan2_debian.html"> LAN 2 - Configuracion DEBIAN</a>
+            <a class="Section" href="Lan2_pfsense.html"> LAN 2 - Configuracion PFSENSE</a>
+            <a class="Section" href="Lan2_prtg.html"> LAN 2 - Configuracion PRTG</a>
+            <a class="Section" href="Lan2_do.html"> LAN 2 - Configuracion D.O.</a>
+        </div>
+            
+    </div>
+
+
+</body>
+</html>

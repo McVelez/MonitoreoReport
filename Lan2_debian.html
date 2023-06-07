@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Configuracion LAN 2</title>
+  <style>
+
+body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f5f5f5;
+    }
+        
+    .Apartados{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: calc(13px + 0.3vw);
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        min-width: 1300px;
+        max-width: 1200px;
+    }
+
+    .codeSection{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        max-width: 70%;
+        background-color: #f5f5dc;
+        border: 1px solid #dbdbc6;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 0 auto; /* Add this line */
+    }
+
+    .block{
+        font-style: italic;
+        align-items: center;
+        text-align: left;
+        margin-right: 10px;
+    }
+
+  </style>
+</head>
+<body>
+    <div class="Apartados">
+        
+        <div>
+            <h1>Configuración Debian LAN 1</h1>
+
+            <h3>1. Configuración del adaptador y dns</h3>
+            <p>El primer paso realizado fue la configuración del servidor debian para asegurar que la interfaz de red fuera la correcta y esta pudiera ser identificada por otros dispositivos dentro de la red.</p>
+            <div class="codeSection">
+                <p>Modificación del archivo /etc/network/interfaces para especificar la ip dentro de la LAN 1.</p>
+                <div class="block">
+                    <ol><code>iface enp0s3 inet static</code></ol>
+                    <ol><code>address 10.22.1.50/24</code></ol>
+                    <ol><code>gateway 10.22.1.8</code></ol>
+                    <ol><code>dns-nameservers 10.22.1.8</code></ol>
+                </div>
+                <p>Tambien modificar el archivo de configuración /etc/resolv.conf para incluir el dns con la dirección del firewall</p>
+                <div class="block">
+                    <ol><code>nameserver 10.22.1.8</code></ol>
+                </div>
+            </div>
+           
+            <h3>2. Configuración del agente </h3>
+            <p>Para poder realizar pruebas directamente con la computadora previamente configurada es necesario instalar un agente SNMP para que el NMS pueda monitorear los sensores especificados</p>
+            <div class="codeSection">
+                <p align="justify">Instalación del servicio SNMP y modificación del archivo /etc/snmp/snmpd.conf. Para la modificación del archivo solamente es necesario especificar la ip y puerto del agentaddress que proporciona la información al manager y especificar en rocommunity la contraseña y dirección en donde se encuentra el NMS</p>
+                <div class="block">
+                    <ol><code>agentaddress udp:10.22.1.50:161</code></ol>
+                    <ol><code>rocommunity public-asr 10.22.1.180</code></ol>
+                </div>
+            </div>
+        
+            <h3>3. Configuración de nginx </h3>
+            <p>Otra configuración realizada fue con respecto a la configuración de nginx para poder mostrar esta página web, en donde se muestra información relacionada con las especificaciones realizadas en la elaboración del proyecto de monitoreo</p>
+            <div class="codeSection">
+                <p align="justify">Creación de directorios y copia de archivos utilizados para el manejo-organización de los contenidos utilizados para nginx</p>
+                <div class="block">
+                    <ol><code>mkdir /srv/www /srv/www/default</code></ol>
+                    <ol><code>cp /var/www/html/index.nginx-debian.html \</code></ol>
+                    <ol><code> &nbsp /srv/www/default/index.nginx-debian.html</code>
+                </div>
+                <p align="justify">Modificación del archivo de configuración de nginx /etc/nginx/sites-available/default para apuntar a la carpeta recién creada</p>
+                <div class="block">
+                    <ol><code>root /srv/www/default</code></ol>
+                </div>
+            </div>
+            
+        </div>
+
+            
+    </div>
+
+
+</body>
+</html>

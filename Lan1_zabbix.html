@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Configuracion LAN 1</title>
+  <style>
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f5f5f5;
+    }
+
+    .Apartados{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: calc(13px + 0.3vw);
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        min-width: 1300px;
+        max-width: 1200px;
+    }
+
+    .codeSection{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        max-width: 70%;
+        background-color: #f5f5dc;
+        border: 1px solid #dbdbc6;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 0 auto; /* Add this line */
+    }
+
+    .block{
+        font-style: italic;
+        align-items: center;
+        text-align: left;
+    }
+
+    .twoColumnList{
+        column-count: 2;
+        column-gap: 10px;
+    }
+    ul {
+      padding-right: 100px;
+      margin: 0;
+    }
+
+
+  </style>
+</head>
+<body>
+    <div class="Apartados">
+        
+        <div>
+            <h1>Configuración Zabbix LAN 1</h1>
+
+            <h3>1. Instalación y configuración del NMS</h3>
+            <p align="justify">Para el caso de la LAN 1 - Lado Izquierdo se maneja el SNMP Manager Zabbix, un NMS gratuito capaz de monitorear varios sensores y dispositivos, teniendo también la capacidad de utilizar triggers y notificaciones para el envío de eventos o alarmas establecidas.</p>
+            <p align="justify">La instalación es realizada en la computadora 10.21.1.50 (Servidor Debian), en donde esta requiere la especificación de un tipo de base de datos (MySQL o PostgreSQL) para la generación de una base de datos en donde se almacena la información recuperada de los agentes y mostrada por el NMS de forma organizada en los dashboards proporcionados. </p>
+            <p align="justify">Una vez instalado correctamente Zabbix se utiliza el puerto 8080 para entrar a la interfaz de Zabbix (19.21.1.50:8080), en donde se tiene acceso a la configuración del NMS, los dispositivos y los sensores por monitorear. </p>
+            <p align="justify">Es importante recalcar que por cada dispositivo agregado en la interfaz de Zabbix se especifica la dirección de dicho dispositivo, el protocolo que se utiliza (SNMP con puerto 161 o Zabbix Agent con puerto 10050) y un template (creado o utilizando uno predeterminado) de sensores comúnmente asociados a un dispositivo. </p>
+            
+            <h3>2. Configuración de agentes para servidores debian y pfsense</h3>
+            <p align="justify">De igual forma que se realizo la configuración del agente en el servidor debian con ip 10.21.1.50 explicado en la sección de configuración de debian se realiza la misma serie de pasos para los dispositivos que se buscan monitorear.</p>
+            <p align="justify">Considerando lo mencionado anteiormente e identificando la gran cantidad de dispositivos por monitorear se desarrolló el siguiente script de bash para facilitar la instalación del agente sobre los dispositivos con sistema operativo de linux. </p>
+            <div class="codeSection">
+                <p align="justify">Es importante considerar que para los dispositivos localizados en la LAN 1 es necesario realizar la instalación y configuración de un agente de zabbix a diferencia de un agente SNMP para poder monitorear correctamente todos los servicios (HTTP, DNS, SSH, etc.) que no pueden ser monitoreados con el uso único de SNMP de forma simple con el uso de Zabbix. </p>
+                <div class="block">
+                    <ol><code style="word-break: break-all;">wget https://repo.zabbix.com/zabbix/6.4/debian/pool/main/z/zabbix-release/zabbix-release_6.4-1+debian11_all.deb</code></ol>
+                    <ol><code>dpkg -i zabbix-release_6.4-1+debian11_all.deb</code></ol>
+                    <ol><code>apt update</code></ol>
+                    <ol><code>apt install zabbix-agent</code></ol>
+                    <ol><code>systemctl enable zabbix-agent</code></ol>
+                    <ol><code>systemctl start zabbix-agent</code></ol>
+                    <ol><code>file='/etc/zabbix/zabbix_agentd.conf'</code></ol>
+                    <ol><code>sed -i "s/^Server=127.*/Server=10.21.1.50/" /etc/zabbix/zabbix_agentd.conf</code></ol>
+                    <ol><code>sed -i 's/^# ListenPort.*/ListenPort=10050/' /etc/zabbix/zabbix_agentd.conf</code></ol>
+                    <ol><code>sed -i 's/^# ListenIP.*/ListenIP=0.0.0.0/' /etc/zabbix/zabbix_agentd.conf</code></ol>
+                    <ol><code>sed -i 's/^ServerActive.*/ServerActive=10.21.1.50/' /etc/zabbix/zabbix_agentd.conf</code></ol>
+                    <ol><code>apt install -y ufw</code></ol>
+                    <ol><code>ufw allow 10050</code></ol>
+                    <ol><code>ufw reload</code></ol>
+                    <ol><code>systemctl restart zabbix-agent</code></ol>
+
+                </div>
+            </div>
+            <p align="justify">Para la configuración de los agentes en pfSense se siguió la misma serie de pasos explicada en la sección de configuración de pfsense, en donde se realizaron varias juntas con los diferentes equipos para la coordinación y verificación de la instalación del agente</p>
+
+            <h3>3. Monitoreo de sensores</h3>
+            <p align="justify"> Como se mencionó previamente, al agregar un dispositivo se puede agregar un template que contenga los sensores por monitorear. Sin embargo, en varias ocasiones un sensor no mantiene la misma nomenclatura de la llave utilizada para identificar al sensor en su respectivo MIB, por lo que se puede llegar a utilizar una regla de discovery de Zabbix para recuperar todos los sensores que pueden ser monitoreados directamente.</p>
+            <p align="justify"> En base a los requerimientos del proyecto se monitorean los siguientes sensores para cada servidor Debian, firewall pfSense y Honeypot:</p>
+            <div class="twoColumnList">
+                <ul>
+                    <li>Uptime</li>
+                    <li>Uso de CPU</li>
+                    <li>Memoria disponible</li>
+                    <li>Espacio en disco disponible</li>
+                    <li>Tráfico de cada adaptador de red (Ancho de banda)</li>
+                </ul>
+            </div>
+            <p align="justify">Por otro lado, se realiza el monitoreo de los servicios de internet para la LAN 1 y las computadoras D.O. (Digital Ocean)</p>
+            <div class="twoColumnList">
+                <ul>
+                    <li>HTTP (lectura char)</li>
+                    <li>FTP</li>
+                    <li>SSH</li>
+                    <li>HTTPS (lectura char)</li>
+                    <li>DNS</li>
+                    <li>freeRadius</li>
+                    <li>SMTP</li>
+                    <li>POP3</li>
+                    <li>IMAP</li>
+                  </ul>
+            </div>
+
+            <h3>4. Configuración de notificaciones a Telegram y Email</h3>
+            <p align="justify">Uno de los puntos importantes del monitoreo de varios dispositivos es en reconocer y alertar la caída y/o un evento crítico de estos (altas temperaturas, cargas de CPU, entre otras), notificando así el riesgo identificado y proporcionando un formato que describe el tipo de error presentado para dar como oportunidad una solución relativamente simple y rápida. </p>
+            <p align="justify">De igual manera que en la mayor parte de los NMS, Zabbix tiene la capacidad de generación de notificaciones por medio de mensajes de Telegram y de generación de correos, sin embargo, para realizar lo anterior es necesario considerar los siguientes elementos: </p>
+            
+            <p>Para la generación y envío de mensajes por Telegram</p>
+            <ul>
+                <li> Un grupo de Telegram con permisos de privacidad público para recibir las notificaciones descritas. </li>
+                <li> Un Telegram Bot y API Url utilizados para el envío de mensajes a un grupo o usuario designado. </li>
+            </ul>
+            <img src="TelegramFlow.PNG" alt="telegram" width="800">
+
+            <p>Para la generación y envío de correos</p>
+            <ul>
+                <li> Un servidor de Correo SMTP que servirá como un servidor relay que se encarga del manejo de envío de los correos. </li>
+                <li> Un correo dedicado y utilizado para el envío de los correos. (Considerando que se debe de generar una contraseña especifica de uso de aplicación de google para el uso de esta) </li>
+            </ul>
+            <img src="EmailFlow.PNG" alt="email" width="800">
+
+        </div>
+
+            
+    </div>
+
+
+</body>
+</html>
