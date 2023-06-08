@@ -81,7 +81,7 @@
                     <ol><code>ip=$(grep -Po "^\s*address \K[\d.]+(?=\/)" "$interfaces_file" | head -n 1)</code></ol>
                     <ol><code>echo "$ip"</code></ol>
                     <ol><code>sed -i "s/^agentaddress.*/agentaddress udp:161/" /etc/snmp/snmpd.conf</code></ol>
-                    <ol><code>sed -i 's/^rocommunity.*/rocommunity public-asr 158.122.66.2/' /etc/snmp/snmpd.conf</code></ol>
+                    <ol><code>sed -i 's/^rocommunity.*/rocommunity public-asr 10.22.1.200/' /etc/snmp/snmpd.conf</code></ol>
                     <ol><code>systemctl restart snmpd</code></ol>
                 </div>
             </div>
